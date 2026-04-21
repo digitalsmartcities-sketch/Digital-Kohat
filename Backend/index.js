@@ -73,17 +73,25 @@ const __dirname = path.dirname(__filename);
 // Backend Middlewares
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
+    // Better logging for production debugging
+    if (!origin) {
+      console.log("No origin header present (local/insomnia/server-side)");
+      return callback(null, true);
+    }
+    
+    // Exact match log
     if (allowedOrigins.includes(origin)) {
+      console.log(`CORS allowed: ${origin}`);
       callback(null, true);
     } else {
-      console.log("CORS blocked origin:", origin);
-      callback(new Error("Not allowed by CORS"));
+      console.warn(`CORS BLOCKED: Received origin '${origin}' which is not in allowedOrigins array.`);
+      // return callback(null, false) is safer than throwing an error for standard CORS flow
+      callback(null, false);
     }
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"]
+  // Removing strict allowedHeaders to avoid preflight issues with custom browser headers
 }));
 
 app.use(express.json({ limit: "50mb" }));
@@ -138,11 +146,26 @@ const startServer = async () => {
       console.log(`Server is running on port ${PORT} 🚀`);
     });
   } catch (err) {
-    console.error("❌ CRITICAL: Server failed to start due to DB connection error:", err);
-    // In production, we log the error but don't crash the cluster/process silently if possible, 
-    // or let the orchestrator (Render) restart the instance.
+    console.error("❌ CRITICAL: Server failed to start:", err);
   }
 };
 
+// ✅ Global Error Handler (Production-Safe)
+app.use((err, req, res, next) => {
+  console.error("GLOBAL ERROR HANDLER:", err.stack || err);
+  
+  // Ensure CORS headers are present even on errors
+  const origin = req.headers.origin;
+  if (allowedOrigins && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
 startServer();
- 
