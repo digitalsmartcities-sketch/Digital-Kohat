@@ -43,7 +43,7 @@ const PORT = process.env.PORT || 5000;
 // ✅ Production Allowed Origins
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://digital-kohat.vercel.app"
+  "https://digital-kohat-indol.vercel.app"
 ];
 
 // ✅ Create HTTP server
