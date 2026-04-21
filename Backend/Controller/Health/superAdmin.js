@@ -7,7 +7,7 @@ import { Specialists, Pharmacies, Emergencies } from "../../Models/HealthModels.
 import { Appointments } from "../../Models/Appointment.js";
 import planLimits from "../../Config/planLimits.js";
 import { cleanupHealthServiceImages, deleteImage, deleteMultipleImages } from "../../utils/cloudinaryCleanup.js";
-import { sendEmailSmtp } from "../../utils/emailSender.js";
+import { sendEmail } from "../../utils/emailSender.js";
 import { serviceProviderApprovalTemplate } from "../../templates/serviceProviderApprovalTemplate.js";
 
 export const getServiceModel = (type) => {
@@ -141,7 +141,7 @@ export const CreateHealthCataAdmin = async (req, res) => {
 
         // Send confirmation email
         const emailHtml = serviceProviderApprovalTemplate(AdminName, ServiceName, "HEALTH");
-        await sendEmailSmtp({
+        await sendEmail({
             to: AdminEmail,
             subject: "Your Service Provider Request has been Approved! - Digital Kohat",
             html: emailHtml

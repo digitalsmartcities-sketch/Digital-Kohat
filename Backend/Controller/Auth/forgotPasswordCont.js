@@ -1,7 +1,8 @@
 import argon2 from "argon2";
 import { Admins } from "../../Models/Admins.js";
 import { UserOtpVerifications } from "../../Models/UserOTPVerification.js";
-import { sendEmailSmtp } from "../../utils/emailSender.js";
+import { sendEmail } from "../../utils/emailSender.js";
+import { passwordResetTemplate } from "../../templates/passwordResetTemplate.js";
 import { Users } from "../../Models/User.js";
 
 /**
@@ -53,22 +54,10 @@ export const requestResetOtp = async (req, res) => {
             expiresAt
         });
 
-        // 3. Send Email
-        const emailHtml = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-                <h2 style="color: #1f8e5c; text-align: center;">Password Reset Request</h2>
-                <p>Hello,</p>
-                <p>You requested a password reset for your Digital Kohat account. Use the following 6-digit OTP to proceed:</p>
-                <div style="background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 5px; margin: 20px 0;">
-                    ${otp}
-                </div>
-                <p>This OTP is valid for 10 minutes. If you did not request this, please ignore this email.</p>
-                <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
-                <p style="font-size: 12px; color: #777; text-align: center;">Digital Kohat Platform - Secure Authentication</p>
-            </div>
-        `;
+        // 3. Send Email using premium template
+        const emailHtml = passwordResetTemplate({ otp });
 
-        const sent = await sendEmailSmtp({
+        const sent = await sendEmail({
             to: email,
             subject: "Your Password Reset OTP - Digital Kohat",
             html: emailHtml

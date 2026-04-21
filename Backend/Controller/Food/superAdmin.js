@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import argon2 from "argon2";
 import { getCollections, selectCollection } from "../../HelperFun/helperFun.js";
 import { deleteImage, cleanupFoodServiceImages } from "../../utils/cloudinaryCleanup.js";
-import { sendEmailSmtp } from "../../utils/emailSender.js";
+import { sendEmail } from "../../utils/emailSender.js";
 import { serviceProviderApprovalTemplate } from "../../templates/serviceProviderApprovalTemplate.js";
 
 /* =========================================================
@@ -162,7 +162,7 @@ export const CreateFoodCataAdmin = async (req, res) => {
 
             // Send confirmation email
             const emailHtml = serviceProviderApprovalTemplate(AdminName, ServiceName, "FOOD");
-            await sendEmailSmtp({
+            await sendEmail({
                 to: AdminEmail,
                 subject: "Your Service Provider Request has been Approved! - Digital Kohat",
                 html: emailHtml

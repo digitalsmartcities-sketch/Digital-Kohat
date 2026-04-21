@@ -4,7 +4,7 @@ import { Admins } from "../../Models/Admins.js";
 import { uploadToCloudinary } from "../../utils/cloudinary.js";
 import { deleteImage } from "../../utils/cloudinaryCleanup.js";
 import { appointmentTemplate } from "../../templates/appointmentTemplate.js";
-import { sendEmailSmtp } from "../../utils/emailSender.js";
+import { sendEmail } from "../../utils/emailSender.js";
 import { sendWhatsAppNotification } from "../../utils/whatsAppSender.js";
 import { getSectorFromType, getServiceModel } from "../../HelperFun/helperFun.js";
 import JWT from "jsonwebtoken";
@@ -536,7 +536,7 @@ export const UpdateAppointmentStatus = async (req, res) => {
 
                 // Send Email
                 const emailHtml = appointmentTemplate(patientName, doctorName, date, finalTime, finalAppNum, consType, mLink);
-                await sendEmailSmtp({
+                await sendEmail({
                     to: patientEmail,
                     subject: "Appointment Confirmation - Digital Kohat Health",
                     html: emailHtml

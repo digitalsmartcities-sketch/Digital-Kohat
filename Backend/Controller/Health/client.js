@@ -4,7 +4,6 @@ import { Admins } from "../../Models/Admins.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../../utils/cloudinary.js";
 import { ObjectId } from "mongodb";
 import { appointmentTemplate } from "../../templates/appointmentTemplate.js";
-import { sendEmailSmtp } from "../../utils/emailSender.js";
 import { sendWhatsAppNotification } from "../../utils/whatsAppSender.js";
 import { getPublicIdFromUrl, selectCollection, getServiceModel, getServiceDoc, resolveServiceResource } from "../../HelperFun/helperFun.js";
 import JWT from "jsonwebtoken";

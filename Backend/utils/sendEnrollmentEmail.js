@@ -1,4 +1,4 @@
-import { sendEmailSmtp } from "./emailSender.js";
+import { sendEmail } from "./emailSender.js";
 import { enrollmentStatusTemplate } from "../templates/enrollmentStatusTemplate.js";
 
 export const sendEnrollmentEmail = async (userEmail, courseName, status, reason = "", whatsappGroupLink = "") => {
@@ -9,7 +9,7 @@ export const sendEnrollmentEmail = async (userEmail, courseName, status, reason 
       ? `Enrollment Confirmed: ${courseName} - Digital Kohat`
       : `Update on your Enrollment: ${courseName} - Digital Kohat`;
 
-    const success = await sendEmailSmtp({
+    const success = await sendEmail({
       to: userEmail,
       subject,
       html: emailHtml

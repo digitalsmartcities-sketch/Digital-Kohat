@@ -4,7 +4,7 @@ import { checkPlanLimit, validatePlanFeature } from "../../utils/planValidation.
 import { getPublicIdFromUrl, selectCollection, getServiceModel } from "../../HelperFun/helperFun.js";
 import { Admins } from "../../Models/Admins.js";
 import { NewServiceRequest } from "../../Models/NewServiceRequest.js";
-import { sendEmailSmtp } from "../../utils/emailSender.js";
+import { sendEmail } from "../../utils/emailSender.js";
 import { serviceProviderApprovalTemplate } from "../../templates/serviceProviderApprovalTemplate.js";
 import { admissionApprovalTemplate } from "../../templates/admissionApprovalTemplate.js";
 import planLimits from "../../Config/planLimits.js";
@@ -168,7 +168,7 @@ export const CreateEduCataAdmin = async (req, res) => {
         // Send confirmation email
         const credentialsInstruction = wasUser ? "Use the credentials you provided during service registration to login." : null;
         const emailHtml = serviceProviderApprovalTemplate(AdminName, ServiceName, "EDUCATION", credentialsInstruction);
-        await sendEmailSmtp({
+        await sendEmail({
             to: AdminEmail,
             subject: "Your Service Provider Request has been Approved! - Digital Kohat",
             html: emailHtml
@@ -1259,7 +1259,7 @@ export const ApproveAdmissionAndForward = async (req, res) => {
 
         // Send confirmation email
         const emailHtml = admissionApprovalTemplate(admission.studentName, institute.ServiceName, admission.targetClass);
-        await sendEmailSmtp({
+        await sendEmail({
             to: admission.email,
             subject: "Congratulations! Your Admission has been Approved - Digital Kohat",
             html: emailHtml

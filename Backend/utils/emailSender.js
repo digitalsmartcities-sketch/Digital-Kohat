@@ -1,48 +1,27 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-// Reusable transporter (improves reliability and connection overhead)
-const createTransporter = () => {
-    return nodemailer.createTransport({
-        host: process.env.SMTP_HOST || 'smtp.gmail.com',
-        port: parseInt(process.env.SMTP_PORT) || 465,
-        secure: (process.env.SMTP_PORT == 465 || !process.env.SMTP_PORT), 
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
-        },
-        connectionTimeout: 20000, // 20 seconds
-        greetingTimeout: 10000,   // 10 seconds
-        socketTimeout: 30000,     // 30 seconds
-        tls: {
-            // Do not fail on invalid certs (common issue in cloud environments)
-            rejectUnauthorized: false
-        }
-    });
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendEmailSmtp = async ({ to, subject, html }) => {
-    let transporter = createTransporter();
-    
+export const sendEmail = async ({ to, subject, html }) => {
     try {
-        console.log(`Attempting to send email to ${to} via port ${process.env.SMTP_PORT || 465}...`);
+        console.log(`Attempting to send email to ${to} via Resend...`);
         
-        const mailOptions = {
-            from: `"Digital Kohat" <${process.env.SMTP_USER}>`,
+        const { data, error } = await resend.emails.send({
+            from: process.env.SMTP_FROM || 'Digital Kohat <onboarding@resend.dev>',
             to,
             subject,
             html
-        };
+        });
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log(`Email sent successfully: ${info.messageId}`);
+        if (error) {
+            console.error('❌ Resend Error:', error);
+            return false;
+        }
+
+        console.log(`Email sent successfully: ${data.id}`);
         return true;
     } catch (error) {
-        console.error('❌ SMTP Error DETAILS:', {
-            message: error.message,
-            code: error.code,
-            command: error.command,
-            response: error.response
-        });
+        console.error('❌ Resend Exception:', error.message);
         return false;
     }
 };
