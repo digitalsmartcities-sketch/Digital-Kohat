@@ -66,11 +66,11 @@ export const businessLogin = async (req, res) => {
         );
 
         res.cookie("bus_token", token, {
-            httpOnly: true,        // Prevents XSS attacks
-            secure: true,          // Only works over HTTPS (MUST in production)
-            sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-            path: "/",             // Accessible across entire site
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+            maxAge: 24 * 60 * 60 * 1000,
+            path: "/",
         });
 
         res.json({
@@ -91,7 +91,7 @@ export const businessLogout = (req, res) => {
     res.clearCookie("bus_token", {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         path: "/",
     });
     res.json({ success: true, message: "Logged out successfully" });

@@ -64,10 +64,10 @@ export const HealthAdminLogin = async (req, res) => {
 
             res.cookie("adm_token", token, {
                 httpOnly: true,        // Prevents XSS attacks
-                secure: true,          // Only works over HTTPS (MUST in production)
-                sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
-                maxAge: 24 * 60 * 60 * 1000, // 1 day
-                path: "/",             // Accessible across entire site
+                secure: true,          // MUST be true for SameSite: None
+                sameSite: "None",      // Allows cross-site cookies between Railway and Vercel
+                maxAge: 24 * 60 * 60 * 1000, 
+                path: "/",
             });
 
             return res.json({
@@ -105,10 +105,10 @@ export const HealthAdminLogin = async (req, res) => {
 
         res.cookie("adm_token", token, {
             httpOnly: true,        // Prevents XSS attacks
-            secure: true,          // Only works over HTTPS (MUST in production)
-            sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-            path: "/",             // Accessible across entire site
+            secure: true,          // MUST be true for SameSite: None 
+            sameSite: "None",      // Allows cross-site cookies between Railway and Vercel
+            maxAge: 24 * 60 * 60 * 1000, 
+            path: "/",
         });
 
         return res.json({
@@ -128,7 +128,7 @@ export const HealthAdminLogout = (req, res) => {
     res.clearCookie("adm_token", {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
         path: "/",
     });
     return res.json({ success: true, message: "Logged out" });

@@ -34,9 +34,6 @@ import foodAdminRoutes from "./Router/Food/Admin.js";
 import foodSARoutes from "./Router/Food/superAdmin.js";
 
 const app = express();
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
 
@@ -53,7 +50,8 @@ const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST"]
   }
 });
 
@@ -74,8 +72,18 @@ const __dirname = path.dirname(__filename);
 
 // Backend Middlewares
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("CORS blocked origin:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"]
 }));
 
 app.use(express.json({ limit: "50mb" }));
@@ -83,6 +91,10 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(generalLimiter);
+
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 
 // Routes
 app.use(AuthRoutes);

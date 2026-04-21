@@ -126,8 +126,8 @@ export const SuperAdminLogin = async (req, res) => {
 
                 res.cookie("adm_token", token, {
                     httpOnly: true,
-                    secure: true,          // Only works over HTTPS (MUST in production)
-                    sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
+                    secure: true,          // MUST be true for SameSite: None
+                    sameSite: "None",      // Allows cross-site cookies between different domains
                     path: "/",
                     maxAge: 24 * 60 * 60 * 1000
                 });
@@ -167,8 +167,8 @@ export const SuperAdminLogin = async (req, res) => {
 
                 res.cookie("adm_token", token, {
                     httpOnly: true,
-                    secure: true,          // Only works over HTTPS (MUST in production)
-                    sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
+                    secure: true,          // MUST be true for SameSite: None
+                    sameSite: "None",      // Allows cross-site cookies between different domains
                     path: "/",
                     maxAge: 24 * 60 * 60 * 1000
                 });
@@ -205,7 +205,7 @@ export const SuperAdminLogout = async (req, res) => {
         res.clearCookie("adm_token", {
             httpOnly: true,
             secure: true,
-            sameSite: "Strict",
+            sameSite: "None",
             path: "/",
         });
 
@@ -645,8 +645,8 @@ export const VerifyRegisterOtp = async (req, res) => {
 
         res.cookie("user_token", token, {
             httpOnly: true,
-            secure: true,          // Only works over HTTPS (MUST in production)
-            sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
+            secure: true,          // MUST be true for SameSite: None
+            sameSite: "None",      // Allows cross-site cookies between different domains
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -753,8 +753,8 @@ export const LoginUser = async (req, res) => {
 
         res.cookie("user_token", token, {
             httpOnly: true,
-            secure: true,          // Only works over HTTPS (MUST in production)
-            sameSite: "Strict",    // CSRF protection ("Lax" or "None" if needed)
+            secure: true,          // MUST be true for SameSite: None
+            sameSite: "None",      // Allows cross-site cookies between different domains
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -781,8 +781,9 @@ export const LoginUser = async (req, res) => {
 export const UserLogout = (req, res) => {
     res.clearCookie("user_token", {
         path: "/",
-        sameSite: "Strict",
-        secure: true 
+        sameSite: "None",
+        secure: true,
+        httpOnly: true
     });
     return res.status(200).json({
         success: true,
