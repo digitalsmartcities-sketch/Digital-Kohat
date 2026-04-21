@@ -34,8 +34,17 @@ import foodAdminRoutes from "./Router/Food/Admin.js";
 import foodSARoutes from "./Router/Food/superAdmin.js";
 
 const app = express();
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
+
+// ✅ Production Allowed Origins
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://digital-kohat.vercel.app"
+];
 
 // ✅ Create HTTP server
 const server = http.createServer(app);
@@ -43,7 +52,7 @@ const server = http.createServer(app);
 // ✅ Create socket server
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: allowedOrigins,
     credentials: true
   }
 });
@@ -65,7 +74,7 @@ const __dirname = path.dirname(__filename);
 
 // Backend Middlewares
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: allowedOrigins,
   credentials: true
 }));
 
@@ -74,11 +83,6 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(generalLimiter);
-
-// DB Connections & Initialization
-await connectMongoose();
-const db = await connectMongoClient();
-app.locals.db = db;
 
 // Routes
 app.use(AuthRoutes);
@@ -108,9 +112,25 @@ app.use("/business/orders", businessOrderRoutes);
 app.use("/business/reviews", reviewRoutes);
 app.use("/customer/auth", customerAuthRoutes);
 
-// ✅ IMPORTANT: server.listen instead of app.listen
-server.timeout = 120000; // 2 minutes
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// ✅ Production-safe Server Startup Flow
+const startServer = async () => {
+  try {
+    console.log("Connecting to Databases...");
+    await connectMongoose();
+    const db = await connectMongoClient();
+    app.locals.db = db;
+    console.log("Database connections successful ✅");
+
+    server.timeout = 120000; // 2 minutes
+    server.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT} 🚀`);
+    });
+  } catch (err) {
+    console.error("❌ CRITICAL: Server failed to start due to DB connection error:", err);
+    // In production, we log the error but don't crash the cluster/process silently if possible, 
+    // or let the orchestrator (Render) restart the instance.
+  }
+};
+
+startServer();
  
