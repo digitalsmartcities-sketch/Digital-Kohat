@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FiClock, FiPlus, FiTrash2, FiSave } from "react-icons/fi";
+import API_BASE_URL from "../../../../config";
 
 const ManageAvailableSlots = ({ data }) => {
     const [slots, setSlots] = useState(data.AvailableSlots || []);
     const [newSlot, setNewSlot] = useState("");
     const [isSaving, setIsSaving] = useState(false);
-    const mainURL = "http://localhost:5500";
+    const mainURL = API_BASE_URL;
 
     const fetchSlots = async () => {
         try {

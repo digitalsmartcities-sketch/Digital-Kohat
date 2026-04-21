@@ -1,7 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import API_BASE_URL from "../config";
 
-const API_URL = "http://localhost:5500"; // Adjust based on your backend URL
+const API_URL = API_BASE_URL; // Centralized backend URL
 
 const axiosInstance = axios.create({
     baseURL: API_URL,

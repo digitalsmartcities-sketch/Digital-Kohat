@@ -3,13 +3,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FiPlus, FiEdit2, FiTrash2, FiBookOpen } from "react-icons/fi";
 import { updateSpecialistEduSec } from "../../../../ApiCalls/HealthDashboardApiCall";
+import API_BASE_URL from "../../../../config";
 
 const ManageEducation = ({ data }) => {
     const [education, setEducation] = useState(data.education || []);
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({ degree: "", institution: "", year: "" });
-    const mainURL = "http://localhost:5500";
+    const mainURL = API_BASE_URL;
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-export const maniURL = "http://localhost:5500"; // Matching MedicalApiCalls
+import API_BASE_URL from "../config";
+export const maniURL = API_BASE_URL; // Matching MedicalApiCalls
 
 const handleHealthRedirect = (res) => {
     const serviceType = res.data.ServiceType;

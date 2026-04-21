@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FiCalendar, FiCheck, FiX, FiTrash2, FiUser, FiMail, FiPhone, FiMessageSquare } from "react-icons/fi";
+import API_BASE_URL from "../../../../config";
 
 const ManageAppointments = ({ data }) => {
     const [appointments, setAppointments] = useState(data.Appointments || []);
-    const mainURL = "http://localhost:5500";
+    const mainURL = API_BASE_URL;
 
     const [showModal, setShowModal] = useState(false);
     const [selectedAppId, setSelectedAppId] = useState(null);

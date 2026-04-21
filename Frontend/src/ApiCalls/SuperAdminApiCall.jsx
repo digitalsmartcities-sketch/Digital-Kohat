@@ -1,7 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import API_BASE_URL from "../config";
 
-const mainURL = "http://localhost:5500";
+const mainURL = API_BASE_URL;
 
 // --- AUTH & CORE ---
 

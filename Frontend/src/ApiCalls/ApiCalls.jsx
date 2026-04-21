@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-const mainURL = "http://localhost:5500";
+import API_BASE_URL from "../config";
+const mainURL = API_BASE_URL;
 
 export const RequestRegisterOtpApi = async (
     formData,

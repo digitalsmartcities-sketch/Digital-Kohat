@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-export const maniURL = "http://localhost:5500";
+import API_BASE_URL from "../config";
+export const maniURL = API_BASE_URL;
 
 const handleRedirect = (res) => {
     const rawSector = res.data?.sector || "";

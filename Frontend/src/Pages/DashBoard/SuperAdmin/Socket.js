@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
+import API_BASE_URL from "../../../config";
 
-export const socket = io("http://localhost:5500", {
+export const socket = io(API_BASE_URL, {
     withCredentials: true,
     transports: ["websocket"]
 });

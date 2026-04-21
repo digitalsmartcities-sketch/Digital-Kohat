@@ -1,8 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { GetUserData, LogoutUserApi } from '../ApiCalls/ApiCalls';
+import API_BASE_URL from '../config';
 
-const mainURL = "http://localhost:5500";
+axios.defaults.baseURL = API_BASE_URL;
 
 export const AppContext = createContext();
 
