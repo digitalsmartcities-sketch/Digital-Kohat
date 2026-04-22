@@ -85,6 +85,7 @@
   position: relative;
   transition: color 0.3s ease;
   padding: 5px 0;
+  cursor: pointer;
 }
 
 .nav-links a::after {

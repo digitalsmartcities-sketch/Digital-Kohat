@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Hero1.css";
+import { useNavigate } from "react-router-dom";
 
 import heroImg1 from "../imgs/hero1.png";
 import heroImg2 from "../imgs/hero2.svg";
@@ -7,6 +8,7 @@ import heroImg3 from "../imgs/slide2.png";
 import aboutImg from "../imgs/slide3.png";
 
 const Hero1 = () => {
+  const navigate = useNavigate();
   const slides = [
     {
       img: heroImg1,
@@ -60,7 +62,12 @@ const Hero1 = () => {
               <div className="hero-content">
                 <h3 className="hero-subtitle">{slide.subtitle}</h3>
                 <h1 className="hero-title">{slide.title}</h1>
-                <button className="hero-bttn">{slide.btn}</button>
+                <button 
+                  className="hero-bttn" 
+                  onClick={() => navigate("/user/register")}
+                >
+                  {slide.btn}
+                </button>
               </div>
             </div>
           </div>
